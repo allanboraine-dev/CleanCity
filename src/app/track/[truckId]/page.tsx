@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/../lib/supabaseClient";
 import { Truck, ArrowLeft, Clock, MapPin, AlertTriangle } from "lucide-react";
@@ -27,6 +27,8 @@ export default function TrackTruck() {
   const wardParam = searchParams.get("ward");
 
   const [fleetData, setFleetData] = useState<FleetData | null>(null);
+  const [streetAddress, setStreetAddress] = useState<string>("Locating street...");
+  const lastGeocodedCoords = useRef({ lat: 0, lng: 0 });
 
   useEffect(() => {
     // 1. Fetch initial truck data
@@ -66,6 +68,39 @@ export default function TrackTruck() {
       supabase.removeChannel(channel);
     };
   }, [truckId]);
+
+  useEffect(() => {
+    if (!fleetData) return;
+
+    // Only reverse geocode if moved significantly (approx ~30 meters)
+    const dLat = Math.abs(fleetData.latitude - lastGeocodedCoords.current.lat);
+    const dLng = Math.abs(fleetData.longitude - lastGeocodedCoords.current.lng);
+    
+    if (dLat < 0.0003 && dLng < 0.0003 && lastGeocodedCoords.current.lat !== 0) {
+      return;
+    }
+
+    const fetchAddress = async () => {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${fleetData.latitude}&lon=${fleetData.longitude}`, {
+          headers: {
+            "Accept-Language": "en-US,en;q=0.9",
+          }
+        });
+        const data = await res.json();
+        if (data && data.address) {
+          const street = data.address.road || data.address.pedestrian || data.address.suburb || data.address.neighbourhood || "Unknown Area";
+          setStreetAddress(street);
+          lastGeocodedCoords.current = { lat: fleetData.latitude, lng: fleetData.longitude };
+        }
+      } catch (err) {
+        console.error("Geocoding failed", err);
+      }
+    };
+
+    const timeout = setTimeout(fetchAddress, 1000);
+    return () => clearTimeout(timeout);
+  }, [fleetData?.latitude, fleetData?.longitude]);
 
   if (!fleetData) {
     return (
@@ -134,6 +169,10 @@ export default function TrackTruck() {
               <h3 className="text-2xl font-black text-slate-800 leading-tight">
                 {fleetData.service_interrupted ? fleetData.interruption_reason : fleetData.status_message}
               </h3>
+              <p className="text-slate-500 font-medium mt-1.5 flex items-center gap-1.5">
+                <MapPin size={14} className="text-slate-400" />
+                Currently at: {streetAddress}
+              </p>
             </div>
           </div>
 
