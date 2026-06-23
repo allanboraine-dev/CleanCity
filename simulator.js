@@ -27,10 +27,10 @@ const galesheweRoute = [
   { lat: -28.727142, lng: 24.735803, status: 'Collecting Bins' },
   { lat: -28.727170, lng: 24.735974, status: 'Minor Traffic Delay' },
   { lat: -28.727187, lng: 24.736100, status: 'Collecting Bins' },
-  { lat: -28.727207, lng: 24.736333, status: 'Mechanical Issue Detected', interrupted: true, reason: 'Engine Failure. Awaiting Tow.' },
-  { lat: -28.727207, lng: 24.736390, status: 'Mechanical Issue Detected', interrupted: true, reason: 'Engine Failure. Awaiting Tow.' },
-  { lat: -28.727207, lng: 24.736488, status: 'Mechanical Issue Detected', interrupted: true, reason: 'Engine Failure. Awaiting Tow.' },
-  { lat: -28.727202, lng: 24.736672, status: 'Service Resumed. Collecting Bins' },
+  { lat: -28.727207, lng: 24.736333, status: 'Collecting Bins' },
+  { lat: -28.727207, lng: 24.736390, status: 'Collecting Bins' },
+  { lat: -28.727207, lng: 24.736488, status: 'Collecting Bins' },
+  { lat: -28.727202, lng: 24.736672, status: 'Collecting Bins' },
   { lat: -28.727202, lng: 24.736892, status: 'Collecting Bins' },
   { lat: -28.727194, lng: 24.737158, status: 'Finishing the block' },
   { lat: -28.727192, lng: 24.737384, status: 'Turning the corner' },
@@ -60,12 +60,7 @@ function generateRouteWithStatuses(coords) {
     else if (i % 15 === 0) status = 'Turning the corner';
     else if (i % 25 === 0) status = 'Minor Traffic Delay';
     
-    // Inject a mechanical issue at roughly 70% of the route
-    if (i === Math.floor(coords.length * 0.7)) {
-      status = 'Mechanical Issue Detected';
-      interrupted = true;
-      reason = 'Engine Failure. Awaiting Tow.';
-    }
+    // (Removed mechanical issue injection for demo purposes)
     
     return { lat: c.lat, lng: c.lng, status, interrupted, reason };
   });
