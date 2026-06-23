@@ -112,7 +112,7 @@ export default function TrackTruck() {
   }
 
   return (
-    <div className="relative h-screen w-full bg-slate-900 overflow-hidden font-sans">
+    <div className="relative h-[100dvh] w-full bg-slate-900 overflow-hidden font-sans">
       {/* Map Layer */}
       <div className="absolute inset-0 z-0">
         <MapComponent 
@@ -154,12 +154,12 @@ export default function TrackTruck() {
       </div>
 
       {/* Floating Bottom Dashboard */}
-      <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 z-20 px-3 sm:px-6 pointer-events-none flex justify-center">
-        <div className="bg-white/90 backdrop-blur-2xl rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] border border-white p-5 sm:p-8 w-full max-w-xl pointer-events-auto transition-transform duration-500 transform hover:-translate-y-2">
+      <div className="absolute bottom-6 sm:bottom-6 left-0 right-0 z-20 px-3 sm:px-6 pointer-events-none flex justify-center pb-safe">
+        <div className="bg-white/90 backdrop-blur-2xl rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] border border-white p-4 sm:p-8 w-full max-w-xl pointer-events-auto transition-transform duration-500 transform hover:-translate-y-2 max-h-[45vh] sm:max-h-none overflow-y-auto no-scrollbar">
           
           {/* Main Status Area */}
-          <div className="flex items-start gap-3 sm:gap-5 mb-5 sm:mb-8">
-            <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-inner flex items-center justify-center ${fleetData.service_interrupted ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'}`}>
+          <div className="flex items-start gap-3 sm:gap-5 mb-4 sm:mb-8">
+            <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-inner flex items-center justify-center shrink-0 ${fleetData.service_interrupted ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'}`}>
               {fleetData.service_interrupted ? <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8" /> : <MapPin className="w-6 h-6 sm:w-8 sm:h-8" />}
             </div>
             <div className="flex-1">
@@ -177,7 +177,7 @@ export default function TrackTruck() {
           </div>
 
           {/* Progress Section */}
-          <div className="mb-5 sm:mb-6 bg-slate-50 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-100">
+          <div className="mb-4 sm:mb-6 bg-slate-50 p-3 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-100 shrink-0">
             <div className="flex justify-between items-end mb-2 sm:mb-3">
               <span className="text-[10px] sm:text-sm font-bold text-slate-400 uppercase tracking-wide">Route Progress</span>
               <span className="text-xl sm:text-2xl font-black text-emerald-600">
@@ -198,8 +198,8 @@ export default function TrackTruck() {
           </div>
 
           {/* Estimated Arrival / Footer */}
-          <div className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl border ${fleetData.service_interrupted ? 'bg-red-50/50 border-red-100 text-red-800' : 'bg-amber-50/50 border-amber-100 text-amber-900'}`}>
-            <div className={`${fleetData.service_interrupted ? 'text-red-400' : 'text-amber-500'} flex items-center justify-center`}>
+          <div className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl border shrink-0 ${fleetData.service_interrupted ? 'bg-red-50/50 border-red-100 text-red-800' : 'bg-amber-50/50 border-amber-100 text-amber-900'}`}>
+            <div className={`${fleetData.service_interrupted ? 'text-red-400' : 'text-amber-500'} flex items-center justify-center shrink-0`}>
               <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
