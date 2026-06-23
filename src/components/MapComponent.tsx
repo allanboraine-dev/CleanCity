@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -29,6 +29,7 @@ interface MapComponentProps {
   latitude: number;
   longitude: number;
   serviceInterrupted: boolean;
+  routePath?: { lat: number, lng: number }[];
 }
 
 const createTruckIcon = (interrupted: boolean) => {
@@ -60,7 +61,9 @@ function MapUpdater({ lat, lng }: { lat: number, lng: number }) {
   return null;
 }
 
-export default function MapComponent({ latitude, longitude, serviceInterrupted }: MapComponentProps) {
+export default function MapComponent({ latitude, longitude, serviceInterrupted, routePath }: MapComponentProps) {
+  const polylinePositions = routePath ? routePath.map(p => [p.lat, p.lng] as [number, number]) : [];
+
   return (
     <MapContainer
       center={[latitude, longitude]}
@@ -73,6 +76,9 @@ export default function MapComponent({ latitude, longitude, serviceInterrupted }
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapUpdater lat={latitude} lng={longitude} />
+      {polylinePositions.length > 0 && (
+        <Polyline positions={polylinePositions} color="#10b981" weight={5} opacity={0.7} dashArray="10, 10" />
+      )}
       <Marker
         position={[latitude, longitude]}
         icon={createTruckIcon(serviceInterrupted)}

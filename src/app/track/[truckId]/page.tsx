@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 
 // Dynamically import the MapComponent to avoid SSR window issues with Leaflet
 const MapComponent = dynamic(() => import("@/components/MapComponent"), { ssr: false });
+import { truckRoutes } from "@/lib/routeData";
 
 interface FleetData {
   latitude: number;
@@ -119,6 +120,7 @@ export default function TrackTruck() {
           latitude={fleetData.latitude} 
           longitude={fleetData.longitude} 
           serviceInterrupted={fleetData.service_interrupted}
+          routePath={truckRoutes[truckId] || []}
         />
         {/* Subtle vignette over the map for premium feel */}
         <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.15)] z-10"></div>
