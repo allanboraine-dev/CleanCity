@@ -13,6 +13,14 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 // Pre-existing Galeshewe route
 const galesheweRoute = [
   { lat: -28.728199, lng: 24.735258, status: 'Starting Collection Route' },
